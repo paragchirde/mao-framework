@@ -6,6 +6,7 @@
 
 import fg from 'fast-glob';
 import path from 'node:path';
+import { readFile } from 'node:fs/promises';
 import type { MaoConfig } from '../config/types.js';
 import { presets } from '../config/presets.js';
 
@@ -201,6 +202,47 @@ export function generateCustomSkillStubs(config: MaoConfig): { path: string; con
           '<!-- ENRICHMENT WILL FILL THIS FROM PRD -->',
           '',
         ].join('\n'),
+      });
+    }
+  }
+
+  return files;
+}
+
+/**
+ * Discover and load community skill files referenced in config.
+ *
+ * Looks for community skills in the `communityDir` (typically `community/`).
+ * Each skill is copied to `skills/{skill-name}/` in the output.
+ *
+ * @param communityDir - Absolute path to the community skills directory
+ * @param skillNames - List of community skill names from config
+ * @returns Array of generated files (path + content) for community skills
+ */
+export async function discoverCommunitySkills(
+  communityDir: string,
+  skillNames: string[],
+): Promise<{ path: string; content: string }[]> {
+  const files: { path: string; content: string }[] = [];
+
+  for (const name of skillNames) {
+    // Strip version suffix if present (e.g., "file-upload@v2" → "file-upload")
+    const skillName = name.replace(/@.*$/, '');
+    const skillDir = path.join(communityDir, skillName);
+
+    // Find all files in the community skill directory
+    const skillFiles = await fg(path.join(skillDir, '**/*'), {
+      absolute: true,
+      onlyFiles: true,
+      ignore: ['**/manifest.yaml', '**/README.md'],
+    });
+
+    for (const filePath of skillFiles) {
+      const relativeToCommunity = path.relative(skillDir, filePath);
+      const content = await readFile(filePath, 'utf-8');
+      files.push({
+        path: `skills/${skillName}/${relativeToCommunity}`,
+        content,
       });
     }
   }

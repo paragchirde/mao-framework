@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig } from '../config/loader.js';
 import { buildContext } from './context.js';
-import { discoverTemplates, generateCustomSkillStubs } from './catalog.js';
+import { discoverTemplates, generateCustomSkillStubs, discoverCommunitySkills } from './catalog.js';
 import { render } from './renderer.js';
 import type { GeneratedFile } from './writer.js';
 import { writeFiles } from './writer.js';
@@ -19,11 +19,13 @@ import { log } from '../utils/logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_CATALOG_DIR = path.resolve(__dirname, '../../catalog');
+const DEFAULT_COMMUNITY_DIR = path.resolve(__dirname, '../../community');
 
 export interface ScaffoldOptions {
   configPath: string;
   outputDir: string;
   catalogDir?: string;
+  communityDir?: string;
   merge?: boolean;
   force?: boolean;
   dryRun?: boolean;
@@ -102,6 +104,17 @@ export async function scaffold(options: ScaffoldOptions): Promise<ScaffoldResult
 
   if (options.verbose && customStubs.length > 0) {
     log.info(`Generated ${customStubs.length} custom skill stub(s)`);
+  }
+
+  // 6b. Copy community skills
+  if (config.community_skills.length > 0) {
+    const communityDir = options.communityDir ?? DEFAULT_COMMUNITY_DIR;
+    const communityFiles = await discoverCommunitySkills(communityDir, config.community_skills);
+    rendered.push(...communityFiles);
+
+    if (options.verbose && communityFiles.length > 0) {
+      log.info(`Copied ${communityFiles.length} community skill file(s)`);
+    }
   }
 
   // 7. Write files (unless dry-run)

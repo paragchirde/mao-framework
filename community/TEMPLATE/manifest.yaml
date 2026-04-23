@@ -1,0 +1,14 @@
+name: my-skill-name
+version: '1.0.0'
+description: 'Brief description of what this skill provides'
+author: 'Your Name <your.email@example.com>'
+compatible_presets:
+  - react-express
+  - nextjs
+  # Add all presets this skill works with
+agents:
+  - backend
+  # Which agents should load this skill
+tags:
+  - example
+  # Searchable tags for discovery
