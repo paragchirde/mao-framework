@@ -1,0 +1,162 @@
+# MAO Configuration — TaskForge Project Management Platform
+# Generated from: sample-prd-fullstack.md
+# Preset: react-express (React + Express + Prisma + PostgreSQL)
+
+project:
+  name: "TaskForge"
+  description: "Collaborative project management platform for development teams"
+  type: mvp # poc | mvp | production
+
+stack:
+  preset: react-express
+  frontend:
+    framework: react
+    language: typescript
+    styling: tailwindcss
+    state_management: tanstack-query
+    component_library: shadcn
+  backend:
+    framework: express
+    language: typescript
+    api_type: rest
+  database:
+    provider: postgresql
+    orm: prisma
+  auth:
+    strategy: google-oauth
+    providers:
+      - google
+    session: jwt
+  testing:
+    unit: vitest
+    e2e: playwright
+  deployment:
+    platform: docker
+    hosting: railway
+
+structure:
+  frontend: "client/src"
+  backend: "server/src"
+  database: "server/prisma"
+  shared: "shared"
+
+agents:
+  - orchestrator
+  - database
+  - backend
+  - frontend
+  - auth
+  - qa
+
+phases:
+  - name: "Foundation"
+    description: "Database schema, authentication, user & workspace CRUD"
+    agents: [database, backend, auth]
+    order: 1
+  - name: "Core Features"
+    description: "Projects, sprints, tasks with auto-numbering, comments"
+    agents: [database, backend, frontend]
+    order: 2
+  - name: "Advanced Features"
+    description: "Time logging, sprint capacity, analytics, archival"
+    agents: [database, backend, frontend]
+    order: 3
+  - name: "Polish"
+    description: "Dashboard, real-time updates, search, error handling"
+    agents: [frontend, backend, qa]
+    order: 4
+
+entities:
+  - name: User
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: email, type: String, unique: true, required: true }
+      - { name: name, type: String, required: true }
+      - { name: avatarUrl, type: String }
+      - { name: role, type: Enum, values: [owner, admin, member, viewer] }
+      - { name: createdAt, type: DateTime }
+      - { name: updatedAt, type: DateTime }
+  - name: Workspace
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: name, type: String, required: true }
+      - { name: slug, type: String, unique: true }
+      - { name: ownerId, type: UUID, references: User }
+      - { name: createdAt, type: DateTime }
+  - name: Project
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: name, type: String, required: true }
+      - { name: description, type: String }
+      - { name: key, type: String, unique: true }
+      - { name: workspaceId, type: UUID, references: Workspace }
+      - { name: status, type: Enum, values: [active, archived] }
+      - { name: createdAt, type: DateTime }
+      - { name: updatedAt, type: DateTime }
+  - name: Sprint
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: name, type: String, required: true }
+      - { name: projectId, type: UUID, references: Project }
+      - { name: startDate, type: DateTime, required: true }
+      - { name: endDate, type: DateTime, required: true }
+      - { name: status, type: Enum, values: [planning, active, completed] }
+      - { name: goal, type: String }
+      - { name: createdAt, type: DateTime }
+  - name: Task
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: title, type: String, required: true }
+      - { name: description, type: String }
+      - { name: projectId, type: UUID, references: Project }
+      - { name: sprintId, type: UUID, references: Sprint }
+      - { name: assigneeId, type: UUID, references: User }
+      - { name: reporterId, type: UUID, references: User }
+      - { name: status, type: Enum, values: [backlog, todo, in_progress, in_review, done] }
+      - { name: priority, type: Enum, values: [critical, high, medium, low] }
+      - { name: storyPoints, type: Int }
+      - { name: taskNumber, type: Int }
+      - { name: dueDate, type: DateTime }
+      - { name: createdAt, type: DateTime }
+      - { name: updatedAt, type: DateTime }
+  - name: Comment
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: content, type: String, required: true }
+      - { name: taskId, type: UUID, references: Task }
+      - { name: authorId, type: UUID, references: User }
+      - { name: createdAt, type: DateTime }
+      - { name: updatedAt, type: DateTime }
+  - name: TimeEntry
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: taskId, type: UUID, references: Task }
+      - { name: userId, type: UUID, references: User }
+      - { name: minutes, type: Int, required: true }
+      - { name: description, type: String }
+      - { name: loggedAt, type: DateTime, required: true }
+      - { name: createdAt, type: DateTime }
+
+custom_skills:
+  - name: task-numbering
+    description: "Auto-generation of sequential task numbers per project (BR-1)"
+    agents: [backend, database]
+    references:
+      - algorithm.md
+  - name: sprint-capacity
+    description: "Sprint capacity calculation from story points and team velocity (BR-2)"
+    agents: [backend, frontend]
+    references:
+      - formula.md
+  - name: task-workflow
+    description: "Task status transition rules and validation (BR-3)"
+    agents: [backend, frontend]
+    references:
+      - state-machine.md
+  - name: time-logging
+    description: "Time entry constraints and daily limit validation (BR-4)"
+    agents: [backend]
+    references:
+      - validation-rules.md
+
+merge_strategy: preserve-custom

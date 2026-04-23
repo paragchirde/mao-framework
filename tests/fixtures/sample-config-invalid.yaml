@@ -1,0 +1,8 @@
+# Invalid config — missing required fields, bad enum values
+project:
+  name: ""
+  description: ""
+  type: prototype  # invalid enum value
+
+stack:
+  preset: angular  # not yet supported

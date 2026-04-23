@@ -1,0 +1,24 @@
+# Config with NEEDS_REVIEW flags — Analyzer output before human review
+project:
+  name: "TaskForge"
+  description: "NEEDS_REVIEW: Confirm project description"
+  type: mvp
+
+stack:
+  preset: react-express
+  frontend:
+    framework: react
+    language: typescript
+    styling: "NEEDS_REVIEW: tailwindcss or styled-components?"
+  backend:
+    framework: express
+    language: typescript
+    api_type: rest
+  database:
+    provider: postgresql
+    orm: prisma
+  auth:
+    strategy: "NEEDS_REVIEW: google-oauth or auth0?"
+    providers:
+      - google
+    session: jwt

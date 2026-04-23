@@ -1,0 +1,54 @@
+# Minimal valid config — POC with SQLite and 4 agents
+project:
+  name: "QuickPOC"
+  description: "Quick proof of concept app"
+  type: poc
+
+stack:
+  preset: react-express
+  frontend:
+    framework: react
+    language: typescript
+    styling: tailwindcss
+  backend:
+    framework: express
+    language: typescript
+    api_type: rest
+  database:
+    provider: postgresql
+    orm: prisma
+  auth:
+    strategy: google-oauth
+    providers:
+      - google
+    session: jwt
+  testing:
+    unit: vitest
+
+structure:
+  frontend: "client/src"
+  backend: "server/src"
+  database: "server/prisma"
+
+agents:
+  - orchestrator
+  - database
+  - backend
+  - qa
+
+phases:
+  - name: "Build"
+    description: "Build everything"
+    agents: [database, backend]
+    order: 1
+
+entities:
+  - name: Item
+    fields:
+      - { name: id, type: UUID, primary: true }
+      - { name: name, type: String, required: true }
+      - { name: createdAt, type: DateTime }
+
+custom_skills: []
+
+merge_strategy: overwrite
