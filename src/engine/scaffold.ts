@@ -1,7 +1,7 @@
 /**
  * Scaffold engine — the central orchestration pipeline.
  *
- * Milestone 1D: Full implementation
+ * Milestone 1D + 2C: Full implementation with merge support
  */
 
 import { readFile } from 'node:fs/promises';
@@ -13,7 +13,8 @@ import { discoverTemplates, generateCustomSkillStubs } from './catalog.js';
 import { render } from './renderer.js';
 import type { GeneratedFile } from './writer.js';
 import { writeFiles } from './writer.js';
-import { saveSnapshot } from './snapshot.js';
+import { saveSnapshot, hasSnapshot } from './snapshot.js';
+import { computeMergeDecisions, summarizeMerge, logMergeResult } from './merge.js';
 import { log } from '../utils/logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -105,6 +106,50 @@ export async function scaffold(options: ScaffoldOptions): Promise<ScaffoldResult
 
   // 7. Write files (unless dry-run)
   if (!options.dryRun) {
+    if (options.merge) {
+      // Merge mode: compare snapshot → disk → new generation
+      const snapshotExists = await hasSnapshot(options.outputDir);
+      if (!snapshotExists) {
+        log.warn('No previous snapshot found — performing full write instead of merge');
+      }
+
+      if (snapshotExists) {
+        const strategy = config.merge_strategy ?? 'preserve-custom';
+        const decisions = await computeMergeDecisions(
+          rendered,
+          options.outputDir,
+          strategy,
+          config,
+        );
+        const result = summarizeMerge(decisions);
+
+        // Apply decisions
+        const toWrite = decisions
+          .filter((d) => (d.action === 'create' || d.action === 'overwrite') && d.newContent)
+          .map((d) => ({ path: d.filePath, content: d.newContent! }));
+
+        if (toWrite.length > 0) {
+          await writeFiles(toWrite, options.outputDir);
+        }
+
+        logMergeResult(result, options.verbose ?? false);
+
+        if (result.conflicts > 0) {
+          log.warn(`${result.conflicts} conflict(s) need manual resolution`);
+        }
+
+        // Save updated snapshot
+        await saveSnapshot(rendered, options.outputDir);
+
+        return {
+          files: toWrite,
+          skipped: decisions.filter((d) => d.action === 'skip').map((d) => d.filePath),
+          totalGenerated: toWrite.length,
+        };
+      }
+    }
+
+    // First-time scaffold (or merge without snapshot) — write everything
     await writeFiles(rendered, options.outputDir);
     log.success(`Wrote ${rendered.length} file(s) to ${options.outputDir}`);
 
