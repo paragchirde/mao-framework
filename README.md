@@ -81,6 +81,7 @@ pnpm scaffold                    # First-time scaffold
 pnpm scaffold -- --merge         # Re-scaffold preserving edits
 pnpm scaffold -- --dry-run       # Preview without writing
 pnpm activate                    # Validate completeness
+pnpm setup                       # Guided 6-step setup
 ```
 
 ## Project Structure
@@ -90,7 +91,7 @@ mao-framework/
 ├── bin/          → CLI entry points (mao-scaffold, mao-activate)
 ├── src/          → Core engine (config, scaffold, renderer, validator, merge)
 ├── catalog/      → Handlebars templates for agents, skills, instructions
-├── tests/        → Unit, integration, E2E tests (100+ tests)
+├── tests/        → Unit, integration, E2E tests (150+ tests)
 ├── docs/         → Documentation
 ├── community/    → Community skill contributions
 └── .github/      → Framework agents (Analyzer, Enricher)
@@ -114,7 +115,10 @@ pnpm format           # Format code
 - [Config Reference](docs/config-reference.md) — Every field, valid value, and default
 - [Agent Catalog](docs/agent-catalog.md) — 6 core agents with descriptions and scope
 - [Skill Packs](docs/skill-packs.md) — react-express preset contents and file tree
+- [Writing Custom Skills](docs/writing-custom-skills.md) — How to create project-specific skills
 - [Merge Strategy](docs/merge-strategy.md) — How re-scaffolding preserves your edits
+- [Best Practices](docs/best-practices.md) — Agent design patterns and tips
+- [Troubleshooting](docs/troubleshooting.md) — Common issues and solutions
 - [Contributing Skills](docs/contributing-skills.md) — How to create community skills
 
 ## Contributing
