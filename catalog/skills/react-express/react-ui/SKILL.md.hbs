@@ -1,58 +1,25 @@
-# React UI
+# React UI > Component and page patterns for
+{{project.name}}
+using React +
+{{stack.frontend.styling}}. ## When to Use Load this skill when creating pages, components, hooks,
+or working with state management. ## Component Pattern ```tsx // Functional component with
+TypeScript props interface
+{{pascal name}}Props { // props } export function
+{{pascal name}}({ ...props }:
+{{pascal name}}Props) { return (
+<div className='...'>
+  {/* component content */}
+</div>
+); } ``` ## Page Pattern - Pages live in `{{structure.frontend}}/pages/` - Pages fetch data and
+compose components - Use
+{{stack.frontend.state_management}}
+for server state ## State Management
 
-> Component and page patterns for {{project.name}} using React + {{stack.frontend.styling}}.
-
-## When to Use
-
-Load this skill when creating pages, components, hooks, or working with state management.
-
-## Component Pattern
-
-```tsx
-// Functional component with TypeScript props
-interface {{pascal name}}Props {
-  // props
-}
-
-export function {{pascal name}}({ ...props }: {{pascal name}}Props) {
-  return (
-    <div className="...">
-      {/* component content */}
-    </div>
-  );
-}
-```
-
-## Page Pattern
-
-- Pages live in `{{structure.frontend}}/pages/`
-- Pages fetch data and compose components
-- Use {{stack.frontend.state_management}} for server state
-
-## State Management
-
-{{#if (eq stack.frontend.state_management "tanstack-query")}}
-Use TanStack Query for all server state:
-
-```tsx
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
-export function use{{pascal name}}s() {
-  return useQuery({ queryKey: ['{{kebab name}}s'], queryFn: fetch{{pascal name}}s });
-}
-```
+{{#if (eq stack.frontend.state_management 'tanstack-query')}}
+  Use TanStack Query for all server state: ```tsx import { useQuery, useMutation, useQueryClient }
+  from '@tanstack/react-query'; export function use{{pascal name}}s() { return useQuery({ queryKey:
+  ['{{kebab name}}s'], queryFn: fetch{{pascal name}}s }); } ```
 {{/if}}
 
-## Key Rules
-
-- Components must be typed with explicit prop interfaces
-- Use composition over prop drilling
-- Keep components small and focused (< 150 lines)
-- Extract reusable logic into custom hooks
-- All user-facing text should be accessible (aria labels, alt text)
-
-## References
-
-- [page-template](references/page-template.md)
-- [component-template](references/component-template.md)
-- [hook-template](references/hook-template.md)
+## Key Rules - Components must be typed with explicit prop interfaces - Use composition over prop
+drilling - Keep components small and focused (

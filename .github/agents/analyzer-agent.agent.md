@@ -1,7 +1,7 @@
 ---
-name: "Analyzer"
-description: "Reads a PRD document and extracts a structured mao.config.yaml and project-context.md. Use this as the first step when setting up a new project with the MAO framework."
-tools: ["read", "edit", "search"]
+name: 'Analyzer'
+description: 'Reads a PRD document and extracts a structured mao.config.yaml and project-context.md. Use this as the first step when setting up a new project with the MAO framework.'
+tools: ['read', 'edit', 'search']
 user-invocable: true
 ---
 
@@ -35,10 +35,13 @@ The user will provide a path to a PRD document (markdown file). Read the entire 
 ## Output Files
 
 ### mao.config.yaml
+
 Complete config with all sections. Every extracted item tagged with `prd_ref` comments.
 
 ### project-context.md
+
 Human-readable domain summary including:
+
 - Project overview
 - Key business rules
 - Entity relationship summary

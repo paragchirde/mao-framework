@@ -1,59 +1,15 @@
-# API Conventions
-
-> Standard API design patterns for {{project.name}}.
-
-## When to Use
-
-Load this skill when designing or implementing any API endpoint.
-
-## Response Format
-
-**Success**:
-```json
-{
-  "data": { ... },
-  "message": "optional success message"
-}
-```
-
-**Error**:
-```json
-{
-  "error": "ERROR_CODE",
-  "message": "Human-readable description"
-}
-```
-
-## HTTP Status Codes
-
-| Code | Use For |
-|------|---------|
-| 200  | Successful GET, PUT, PATCH |
-| 201  | Successful POST (resource created) |
-| 204  | Successful DELETE (no body) |
-| 400  | Validation error, bad request |
-| 401  | Not authenticated |
-| 403  | Authenticated but not authorized |
-| 404  | Resource not found |
-| 409  | Conflict (duplicate, state conflict) |
-| 422  | Unprocessable entity |
-| 500  | Server error (never expose internals) |
-
-## Endpoint Naming
-
-- Use plural nouns: `/api/users`, `/api/tasks`
-- Nest for relations: `/api/projects/:projectId/tasks`
-- Use kebab-case: `/api/team-members`
-- Actions as sub-resources: `/api/tasks/:id/assign`
-
-## Key Rules
-
-- Every endpoint must validate request body/params/query
-- Every response must follow the standard format above
-- Never expose internal error details in production
-- Use pagination for list endpoints
-- Include `Content-Type: application/json` header
-
-## References
-
-- [conventions](references/conventions.md)
+# API Conventions > Standard API design patterns for
+{{project.name}}. ## When to Use Load this skill when designing or implementing any API endpoint. ##
+Response Format **Success**: ```json { "data": { ... }, "message": "optional success message" } ```
+**Error**: ```json { "error": "ERROR_CODE", "message": "Human-readable description" } ``` ## HTTP
+Status Codes | Code | Use For | |------|---------| | 200 | Successful GET, PUT, PATCH | | 201 |
+Successful POST (resource created) | | 204 | Successful DELETE (no body) | | 400 | Validation error,
+bad request | | 401 | Not authenticated | | 403 | Authenticated but not authorized | | 404 |
+Resource not found | | 409 | Conflict (duplicate, state conflict) | | 422 | Unprocessable entity | |
+500 | Server error (never expose internals) | ## Endpoint Naming - Use plural nouns: `/api/users`,
+`/api/tasks` - Nest for relations: `/api/projects/:projectId/tasks` - Use kebab-case:
+`/api/team-members` - Actions as sub-resources: `/api/tasks/:id/assign` ## Key Rules - Every
+endpoint must validate request body/params/query - Every response must follow the standard format
+above - Never expose internal error details in production - Use pagination for list endpoints -
+Include `Content-Type: application/json` header ## References -
+[conventions](references/conventions.md)

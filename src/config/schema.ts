@@ -21,14 +21,7 @@ const ComponentLibrary = z.enum(['shadcn', 'mui', 'ant-design', 'none']).optiona
 const ApiType = z.enum(['rest', 'graphql']);
 const DatabaseProvider = z.enum(['postgresql', 'mysql', 'sqlite', 'mongodb']);
 const ORM = z.enum(['prisma', 'typeorm', 'sqlalchemy', 'mongoose', 'drizzle']);
-const AuthStrategy = z.enum([
-  'google-oauth',
-  'email-password',
-  'auth0',
-  'clerk',
-  'custom',
-  'none',
-]);
+const AuthStrategy = z.enum(['google-oauth', 'email-password', 'auth0', 'clerk', 'custom', 'none']);
 const SessionType = z.enum(['jwt', 'session', 'none']);
 const MergeStrategy = z.enum(['preserve-custom', 'overwrite', 'prompt']);
 
@@ -45,16 +38,7 @@ const AgentRole = z.enum([
   'ai-ml',
 ]);
 
-const FieldType = z.enum([
-  'UUID',
-  'String',
-  'Int',
-  'Float',
-  'Boolean',
-  'DateTime',
-  'Enum',
-  'JSON',
-]);
+const FieldType = z.enum(['UUID', 'String', 'Int', 'Float', 'Boolean', 'DateTime', 'Enum', 'JSON']);
 
 // ─── Sub-schemas ───
 

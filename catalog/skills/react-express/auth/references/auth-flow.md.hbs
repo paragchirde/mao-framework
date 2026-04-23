@@ -1,41 +1,17 @@
-# Auth Flow — {{stack.auth.strategy}}
+# Auth Flow —
+{{stack.auth.strategy}}
 
-## Backend Routes
-
-```
-POST   /api/auth/login          → Login with credentials
-POST   /api/auth/register       → Register new user
-POST   /api/auth/logout         → Clear session
-POST   /api/auth/refresh        → Refresh access token
-GET    /api/auth/me             → Get current user
-{{#if (eq stack.auth.strategy "google-oauth")}}
-GET    /api/auth/google          → Redirect to Google
-GET    /api/auth/google/callback → Handle Google callback
+## Backend Routes ``` POST /api/auth/login → Login with credentials POST /api/auth/register →
+Register new user POST /api/auth/logout → Clear session POST /api/auth/refresh → Refresh access
+token GET /api/auth/me → Get current user
+{{#if (eq stack.auth.strategy 'google-oauth')}}
+  GET /api/auth/google → Redirect to Google GET /api/auth/google/callback → Handle Google callback
 {{/if}}
-```
-
-## Frontend Auth State
-
-```tsx
-// hooks/useAuth.ts
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: () => void;
-  logout: () => void;
-}
-```
-
-## Protected Route Pattern
-
-```tsx
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return <LoadingSpinner />;
-  if (!isAuthenticated) return <Navigate to="/login" />;
-  return children;
-}
-```
+``` ## Frontend Auth State ```tsx // hooks/useAuth.ts interface AuthState { user: User | null;
+isAuthenticated: boolean; isLoading: boolean; login: () => void; logout: () => void; } ``` ##
+Protected Route Pattern ```tsx function ProtectedRoute({ children }: { children: React.ReactNode })
+{ const { isAuthenticated, isLoading } = useAuth(); if (isLoading) return
+<LoadingSpinner />; if (!isAuthenticated) return
+<Navigate to='/login' />; return children; } ```
 
 <!-- ENRICHMENT WILL FILL THIS FROM PRD — role-based access, permissions -->

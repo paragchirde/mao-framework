@@ -1,15 +1,9 @@
 ---
-applyTo: "{{structure.backend}}/routes/**"
+applyTo: '{{structure.backend}}/routes/**'
 ---
 
-# Express Routes Instructions
-
-When working in route files:
-
-- Always wrap async handlers with `asyncHandler()`
-- Validate request body with Zod schemas before processing
-- Return consistent response format: `{ data }` or `{ error, message }`
-- Use correct HTTP status codes (201 for created, 204 for deleted)
-- Keep routes thin — delegate logic to service layer
-- Import validators from `../validators/` directory
-- Register new routes in `routes/index.ts`
+# Express Routes Instructions When working in route files: - Always wrap async handlers with
+`asyncHandler()` - Validate request body with Zod schemas before processing - Return consistent
+response format: `{ data }` or `{ error, message }` - Use correct HTTP status codes (201 for
+created, 204 for deleted) - Keep routes thin — delegate logic to service layer - Import validators
+from `../validators/` directory - Register new routes in `routes/index.ts`

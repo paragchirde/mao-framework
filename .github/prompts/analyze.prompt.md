@@ -1,6 +1,6 @@
 ---
-name: "Analyze PRD"
-description: "Analyze a PRD document and generate mao.config.yaml"
+name: 'Analyze PRD'
+description: 'Analyze a PRD document and generate mao.config.yaml'
 ---
 
 # Analyze PRD

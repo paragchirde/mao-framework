@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { loadConfig, ConfigValidationError, detectNeedsReview } from '../../../src/config/loader.js';
+import {
+  loadConfig,
+  ConfigValidationError,
+  detectNeedsReview,
+} from '../../../src/config/loader.js';
 
 const fixturesDir = path.resolve('tests/fixtures');
 
@@ -36,9 +40,9 @@ describe('loadConfig', () => {
   });
 
   it('should throw ConfigValidationError for invalid config', async () => {
-    await expect(
-      loadConfig(path.join(fixturesDir, 'sample-config-invalid.yaml')),
-    ).rejects.toThrow(ConfigValidationError);
+    await expect(loadConfig(path.join(fixturesDir, 'sample-config-invalid.yaml'))).rejects.toThrow(
+      ConfigValidationError,
+    );
   });
 
   it('should throw for non-existent file', async () => {

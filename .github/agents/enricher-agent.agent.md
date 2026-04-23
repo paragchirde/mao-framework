@@ -1,7 +1,7 @@
 ---
-name: "Enricher"
-description: "Reads the PRD and fills all scaffolded skill stubs with real domain knowledge — algorithms, data models, API contracts, and implementation details. Run this after scaffolding."
-tools: ["read", "edit", "search"]
+name: 'Enricher'
+description: 'Reads the PRD and fills all scaffolded skill stubs with real domain knowledge — algorithms, data models, API contracts, and implementation details. Run this after scaffolding.'
+tools: ['read', 'edit', 'search']
 user-invocable: true
 ---
 
@@ -14,6 +14,7 @@ Load the `skill-enrichment` skill before starting. It contains enrichment rules,
 ## Input
 
 The user has already run the Analyzer (Step 1) and Scaffold (Step 3). You have access to:
+
 - PRD document (path in `mao.config.yaml` → `project.prd`)
 - `mao.config.yaml` (structured config)
 - `project-context.md` (domain summary)

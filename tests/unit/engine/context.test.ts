@@ -33,7 +33,12 @@ const sampleConfig = {
   },
   agents: ['orchestrator', 'database', 'backend', 'frontend', 'auth', 'qa'] as MaoConfig['agents'],
   phases: [
-    { name: 'Phase 1', description: 'Foundation', agents: ['database' as const, 'backend' as const], order: 1 },
+    {
+      name: 'Phase 1',
+      description: 'Foundation',
+      agents: ['database' as const, 'backend' as const],
+      order: 1,
+    },
   ],
   entities: [
     {

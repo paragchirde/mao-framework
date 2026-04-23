@@ -45,14 +45,7 @@ export const presetDefaults: Record<string, DeepPartial<MaoConfigInput>> = {
       backend: 'server/src',
       database: 'server/prisma',
     },
-    agents: [
-      'orchestrator',
-      'database',
-      'backend',
-      'frontend',
-      'auth',
-      'qa',
-    ],
+    agents: ['orchestrator', 'database', 'backend', 'frontend', 'auth', 'qa'],
     merge_strategy: 'preserve-custom',
   },
 };

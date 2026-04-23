@@ -158,9 +158,7 @@ export async function discoverTemplates(
  * Generate stub files for custom skills defined in config.
  * These aren't from catalog templates — they're programmatically created.
  */
-export function generateCustomSkillStubs(
-  config: MaoConfig,
-): { path: string; content: string }[] {
+export function generateCustomSkillStubs(config: MaoConfig): { path: string; content: string }[] {
   const files: { path: string; content: string }[] = [];
 
   for (const skill of config.custom_skills) {

@@ -69,14 +69,9 @@ export async function loadConfig(configPath: string): Promise<LoadConfigResult> 
         message: issue.message,
       }));
 
-      const formatted = issues
-        .map((i) => `  ${i.path}: ${i.message}`)
-        .join('\n');
+      const formatted = issues.map((i) => `  ${i.path}: ${i.message}`).join('\n');
 
-      throw new ConfigValidationError(
-        `Config validation failed:\n${formatted}`,
-        issues,
-      );
+      throw new ConfigValidationError(`Config validation failed:\n${formatted}`, issues);
     }
     throw error;
   }

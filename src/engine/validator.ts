@@ -255,7 +255,10 @@ export async function activate(options: ActivateOptions): Promise<ValidationResu
       if (agent === 'orchestrator') continue;
       const agentRef = `${agent}-agent`;
       const agentFileName = `${agentRef}.agent.md`;
-      if (orchestratorContent.includes(agentRef) && !(await fileExists(path.join(agentsDir, agentFileName)))) {
+      if (
+        orchestratorContent.includes(agentRef) &&
+        !(await fileExists(path.join(agentsDir, agentFileName)))
+      ) {
         issues.push({
           category: 'consistency',
           severity: 'error',

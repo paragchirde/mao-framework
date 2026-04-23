@@ -4,29 +4,36 @@
 
 Each reference file should follow this structure:
 
-```markdown
+````markdown
 # [Reference Name]
 
 <!-- Source: PRD §X.X -->
 <!-- Confidence: HIGH|MEDIUM|LOW -->
 
 ## Overview
+
 Brief description of what this reference covers.
 
 ## Algorithm / Logic
+
 Step-by-step pseudocode or detailed logic.
 
 ## Types
+
 ```typescript
 // Input and output types
 ```
+````
 
 ## Edge Cases
+
 - Case 1: description → expected behavior
 - Case 2: description → expected behavior
 
 ## Examples
+
 Concrete examples with inputs and expected outputs.
+
 ```
 
 ## Stack Skill Reference Enrichment
@@ -61,3 +68,4 @@ Concrete examples with inputs and expected outputs.
 4. UI templates (depend on API contracts)
 5. Orchestrator phase breakdown (depends on all above)
 6. Copilot instructions (summary of all above)
+```

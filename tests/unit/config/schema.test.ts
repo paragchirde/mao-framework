@@ -14,7 +14,12 @@ const validFullConfig = {
   structure: { frontend: 'client/src', backend: 'server/src', database: 'server/prisma' },
   agents: ['orchestrator', 'database', 'backend', 'frontend', 'auth', 'qa'],
   phases: [
-    { name: 'Foundation', description: 'DB + Auth', agents: ['database', 'backend', 'auth'], order: 1 },
+    {
+      name: 'Foundation',
+      description: 'DB + Auth',
+      agents: ['database', 'backend', 'auth'],
+      order: 1,
+    },
     { name: 'Core', description: 'Main features', agents: ['backend', 'frontend'], order: 2 },
   ],
   entities: [
@@ -29,7 +34,12 @@ const validFullConfig = {
     },
   ],
   custom_skills: [
-    { name: 'task-numbering', description: 'Auto task numbers', agents: ['backend'], references: ['algo.md'] },
+    {
+      name: 'task-numbering',
+      description: 'Auto task numbers',
+      agents: ['backend'],
+      references: ['algo.md'],
+    },
   ],
   merge_strategy: 'preserve-custom',
 };
@@ -47,7 +57,10 @@ describe('MaoConfigSchema', () => {
   });
 
   it('should reject invalid project type', () => {
-    const config = { ...validFullConfig, project: { ...validFullConfig.project, type: 'prototype' } };
+    const config = {
+      ...validFullConfig,
+      project: { ...validFullConfig.project, type: 'prototype' },
+    };
     const result = MaoConfigSchema.safeParse(config);
     expect(result.success).toBe(false);
   });
@@ -73,9 +86,7 @@ describe('MaoConfigSchema', () => {
     const config = {
       ...validFullConfig,
       agents: ['orchestrator', 'backend'],
-      phases: [
-        { name: 'Phase 1', description: 'Test', agents: ['backend', 'mobile'], order: 1 },
-      ],
+      phases: [{ name: 'Phase 1', description: 'Test', agents: ['backend', 'mobile'], order: 1 }],
     };
     const result = MaoConfigSchema.safeParse(config);
     expect(result.success).toBe(false);
@@ -85,9 +96,7 @@ describe('MaoConfigSchema', () => {
     const config = {
       ...validFullConfig,
       agents: ['orchestrator', 'backend'],
-      custom_skills: [
-        { name: 'skill', description: 'Test', agents: ['frontend'], references: [] },
-      ],
+      custom_skills: [{ name: 'skill', description: 'Test', agents: ['frontend'], references: [] }],
     };
     const result = MaoConfigSchema.safeParse(config);
     expect(result.success).toBe(false);

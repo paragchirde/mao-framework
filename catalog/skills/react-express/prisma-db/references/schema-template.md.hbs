@@ -1,38 +1,21 @@
-# Prisma Schema Template
-
-```prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "{{stack.database.provider}}"
-  url      = env("DATABASE_URL")
-}
+# Prisma Schema Template ```prisma generator client { provider = "prisma-client-js" } datasource db
+{ provider = "{{stack.database.provider}}" url = env("DATABASE_URL") }
 
 {{#each entities}}
-model {{pascal name}} {
-  id        String   @id @default(uuid())
-{{#each fields}}
-{{#unless primary}}
-  {{name}}  {{type}}{{#if unique}} @unique{{/if}}{{#if required}}{{else}}?{{/if}}
-{{/unless}}
-{{/each}}
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("{{kebab name}}s")
-}
+  model
+  {{pascal name}}
+  { id String @id @default(uuid())
+  {{#each fields}}
+    {{#unless primary}}
+      {{name}}
+      {{type}}{{#if unique}} @unique{{/if}}{{#if required}}{{else}}?{{/if}}
+    {{/unless}}
+  {{/each}}
+  createdAt DateTime @default(now()) updatedAt DateTime @updatedAt @@map("{{kebab name}}s") }
 
 {{/each}}
-```
-
-## Conventions
-
-- Model names: PascalCase singular (`User`, `Task`)
-- Table names: kebab-case plural via `@@map`
-- Field names: camelCase
-- Relation fields: named after the related model
-- Enums: UPPER_SNAKE_CASE values
+``` ## Conventions - Model names: PascalCase singular (`User`, `Task`) - Table names: kebab-case
+plural via `@@map` - Field names: camelCase - Relation fields: named after the related model -
+Enums: UPPER_SNAKE_CASE values
 
 <!-- ENRICHMENT WILL FILL THIS FROM PRD — entity relations, constraints, indexes -->

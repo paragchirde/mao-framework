@@ -1,6 +1,6 @@
 ---
-name: "Enrich Skills"
-description: "Fill scaffolded skill stubs with domain knowledge from the PRD"
+name: 'Enrich Skills'
+description: 'Fill scaffolded skill stubs with domain knowledge from the PRD'
 ---
 
 # Enrich Skills
