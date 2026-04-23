@@ -1,0 +1,35 @@
+# Prisma + {{pascal stack.database.provider}}
+
+> Database patterns for {{project.name}} using Prisma with {{stack.database.provider}}.
+
+## When to Use
+
+Load this skill when working on database schema, migrations, seeds, or any ORM queries.
+
+## Schema Rules
+
+- Every model must have an `id` field (UUID by default)
+- Every model must have `createdAt` and `updatedAt` timestamps
+- Use `@relation` for all foreign keys with explicit names
+- Use enums for fixed-value fields
+- Add `@@index` for commonly queried fields
+- Add `@@unique` for business-key combinations
+
+## Migration Workflow
+
+1. Edit `schema.prisma`
+2. Run `npx prisma migrate dev --name descriptive-name`
+3. Verify migration SQL is correct
+4. Update seed file if new models added
+
+## Query Patterns
+
+- Use `findUnique` for single record by unique field
+- Use `findMany` with `where`, `orderBy`, `skip`, `take` for lists
+- Use `include` for eager loading relations (max 2 levels deep)
+- Use transactions for multi-model writes: `prisma.$transaction([...])`
+
+## References
+
+- [schema-template](references/schema-template.md)
+- [seed-template](references/seed-template.md)

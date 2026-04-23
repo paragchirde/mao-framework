@@ -1,0 +1,42 @@
+# React Component Template
+
+## Component Pattern
+
+```tsx
+interface {{pascal name}}CardProps {
+  {{kebab name}}: {{pascal name}};
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+}
+
+export function {{pascal name}}Card({ {{kebab name}}, onEdit, onDelete }: {{pascal name}}CardProps) {
+  return (
+    <div className="rounded-lg border p-4 shadow-sm">
+      {/* component content */}
+    </div>
+  );
+}
+```
+
+## Form Component Pattern
+
+```tsx
+interface {{pascal name}}FormProps {
+  initialData?: Partial<{{pascal name}}>;
+  onSubmit: (data: Create{{pascal name}}Input) => void;
+  isLoading?: boolean;
+}
+
+export function {{pascal name}}Form({ initialData, onSubmit, isLoading }: {{pascal name}}FormProps) {
+  // form implementation
+}
+```
+
+## Conventions
+
+- One component per file
+- Component name matches file name
+- Props interface above component
+- Default exports only for pages; named exports for components
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — entity-specific component details -->

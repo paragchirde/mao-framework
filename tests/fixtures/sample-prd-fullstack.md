@@ -24,12 +24,12 @@ TaskForge is a collaborative project management platform designed for small-to-m
 
 ### 3. User Roles
 
-| Role | Permissions |
-|------|------------|
-| **Owner** | Full access. Manage billing, delete workspace, manage members. |
-| **Admin** | Manage projects, sprints, members. Cannot delete workspace or manage billing. |
-| **Member** | Create/edit tasks, log time, comment. Cannot manage sprints or members. |
-| **Viewer** | Read-only access to projects and tasks. |
+| Role       | Permissions                                                                   |
+| ---------- | ----------------------------------------------------------------------------- |
+| **Owner**  | Full access. Manage billing, delete workspace, manage members.                |
+| **Admin**  | Manage projects, sprints, members. Cannot delete workspace or manage billing. |
+| **Member** | Create/edit tasks, log time, comment. Cannot manage sprints or members.       |
+| **Viewer** | Read-only access to projects and tasks.                                       |
 
 ---
 
@@ -38,6 +38,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 #### 4.1 Entities
 
 **User**
+
 - id: UUID (primary key)
 - email: String (unique, required)
 - name: String (required)
@@ -47,6 +48,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - updatedAt: DateTime
 
 **Workspace**
+
 - id: UUID (primary key)
 - name: String (required, min 2, max 100)
 - slug: String (unique, derived from name)
@@ -54,6 +56,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - createdAt: DateTime
 
 **Project**
+
 - id: UUID (primary key)
 - name: String (required)
 - description: String (optional)
@@ -64,6 +67,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - updatedAt: DateTime
 
 **Sprint**
+
 - id: UUID (primary key)
 - name: String (required)
 - projectId: UUID (foreign key → Project)
@@ -74,6 +78,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - createdAt: DateTime
 
 **Task**
+
 - id: UUID (primary key)
 - title: String (required, min 3, max 200)
 - description: String (optional, markdown supported)
@@ -90,6 +95,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - updatedAt: DateTime
 
 **Comment**
+
 - id: UUID (primary key)
 - content: String (required, markdown supported)
 - taskId: UUID (foreign key → Task)
@@ -98,6 +104,7 @@ TaskForge is a collaborative project management platform designed for small-to-m
 - updatedAt: DateTime
 
 **TimeEntry**
+
 - id: UUID (primary key)
 - taskId: UUID (foreign key → Task)
 - userId: UUID (foreign key → User)
@@ -125,13 +132,17 @@ TaskForge is a collaborative project management platform designed for small-to-m
 ### 5. Business Rules
 
 #### BR-1: Task Number Auto-Generation
+
 When a new task is created, automatically assign the next sequential task number for that project. Display format: `{project.key}-{taskNumber}` (e.g., "TF-42"). Task numbers are never reused, even if a task is deleted.
 
 #### BR-2: Sprint Capacity Calculation
+
 Sprint capacity is calculated as: `sum of storyPoints for all tasks in the sprint`. Display a capacity bar showing `assigned / total available`. Total available is calculated as: `number of team members × average velocity per member`. Average velocity is computed from the last 3 completed sprints.
 
 #### BR-3: Task Status Transitions
+
 Tasks follow a workflow:
+
 - `backlog` → `todo` (requires sprint assignment)
 - `todo` → `in_progress` (requires assignee)
 - `in_progress` → `in_review` (anyone)
@@ -141,17 +152,20 @@ Tasks follow a workflow:
 - Any status → `backlog` (de-scoping)
 
 #### BR-4: Time Logging Constraints
+
 - Time entries cannot exceed 24 hours (1440 minutes) per entry
 - Time entries cannot be logged for future dates
 - Only task assignees and admins can log time against a task
 - Total logged time per user per day cannot exceed 24 hours across all tasks
 
 #### BR-5: Workspace Member Limits
+
 - Free tier: maximum 5 members per workspace
 - Pro tier: maximum 50 members per workspace
 - Enterprise tier: unlimited
 
 #### BR-6: Project Archive Rules
+
 - Only admins and owners can archive a project
 - Archiving a project moves all active sprints to "completed"
 - Archived projects are read-only — no new tasks, comments, or time entries
@@ -162,6 +176,7 @@ Tasks follow a workflow:
 ### 6. API Requirements
 
 #### 6.1 Authentication
+
 - `POST /api/auth/register` — Email/password registration
 - `POST /api/auth/login` — Email/password login (returns JWT)
 - `GET /api/auth/google` — Google OAuth initiation
@@ -170,6 +185,7 @@ Tasks follow a workflow:
 - `POST /api/auth/logout` — Invalidate token
 
 #### 6.2 Workspaces
+
 - `POST /api/workspaces` — Create workspace
 - `GET /api/workspaces` — List user's workspaces
 - `GET /api/workspaces/:id` — Get workspace details
@@ -178,6 +194,7 @@ Tasks follow a workflow:
 - `DELETE /api/workspaces/:id/members/:userId` — Remove member
 
 #### 6.3 Projects
+
 - `POST /api/workspaces/:wid/projects` — Create project
 - `GET /api/workspaces/:wid/projects` — List projects
 - `GET /api/projects/:id` — Get project with stats
@@ -185,6 +202,7 @@ Tasks follow a workflow:
 - `PATCH /api/projects/:id/archive` — Archive/restore project
 
 #### 6.4 Sprints
+
 - `POST /api/projects/:pid/sprints` — Create sprint
 - `GET /api/projects/:pid/sprints` — List sprints
 - `GET /api/sprints/:id` — Get sprint with tasks and capacity
@@ -193,6 +211,7 @@ Tasks follow a workflow:
 - `PATCH /api/sprints/:id/complete` — Complete sprint
 
 #### 6.5 Tasks
+
 - `POST /api/projects/:pid/tasks` — Create task (auto-generates task number)
 - `GET /api/projects/:pid/tasks` — List tasks (filterable by status, assignee, sprint, priority)
 - `GET /api/tasks/:id` — Get task with comments and time entries
@@ -201,17 +220,20 @@ Tasks follow a workflow:
 - `DELETE /api/tasks/:id` — Soft delete task
 
 #### 6.6 Comments
+
 - `POST /api/tasks/:tid/comments` — Add comment
 - `PATCH /api/comments/:id` — Edit comment (author only)
 - `DELETE /api/comments/:id` — Delete comment (author or admin)
 
 #### 6.7 Time Entries
+
 - `POST /api/tasks/:tid/time` — Log time (validates BR-4)
 - `GET /api/tasks/:tid/time` — Get time entries for task
 - `GET /api/users/:uid/time?from=&to=` — Get time entries for user in range
 - `DELETE /api/time/:id` — Delete time entry (author or admin)
 
 #### 6.8 Analytics
+
 - `GET /api/projects/:pid/analytics/velocity` — Sprint velocity chart data
 - `GET /api/projects/:pid/analytics/burndown` — Current sprint burndown
 - `GET /api/workspaces/:wid/analytics/team` — Team workload distribution
@@ -221,12 +243,14 @@ Tasks follow a workflow:
 ### 7. Implementation Phases
 
 #### Phase 1: Foundation (Weeks 1–2)
+
 - Database schema (all entities)
 - Authentication (email/password + Google OAuth)
 - User and Workspace CRUD
 - Basic project structure setup
 
 #### Phase 2: Core Features (Weeks 3–4)
+
 - Project CRUD with key generation
 - Sprint management (create, start, complete)
 - Task CRUD with auto-numbering (BR-1)
@@ -234,6 +258,7 @@ Tasks follow a workflow:
 - Comment system
 
 #### Phase 3: Advanced Features (Weeks 5–6)
+
 - Time logging with constraints (BR-4)
 - Sprint capacity calculation (BR-2)
 - Analytics endpoints (velocity, burndown)
@@ -241,6 +266,7 @@ Tasks follow a workflow:
 - Member management with role enforcement
 
 #### Phase 4: Polish (Weeks 7–8)
+
 - Frontend pages: Dashboard, Project Board, Sprint Board, Task Detail
 - Real-time updates (WebSocket for task status changes)
 - Search and filtering

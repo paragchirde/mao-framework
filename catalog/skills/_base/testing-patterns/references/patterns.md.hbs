@@ -1,0 +1,59 @@
+# Testing Patterns Reference
+
+## Unit Test Template
+
+```typescript
+import { describe, it, expect, vi, beforeEach } from '{{stack.testing.unit}}';
+
+describe('TaskService', () => {
+  let service: TaskService;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    service = new TaskService(mockPrisma);
+  });
+
+  describe('create', () => {
+    it('should create a task with valid input', async () => {
+      mockPrisma.task.create.mockResolvedValue(mockTask);
+      const result = await service.create(validInput);
+      expect(result).toEqual(mockTask);
+    });
+
+    it('should throw ValidationError for invalid input', async () => {
+      await expect(service.create(invalidInput)).rejects.toThrow(ValidationError);
+    });
+  });
+});
+```
+
+## Mock Patterns
+
+```typescript
+// Mock a module
+vi.mock('../services/task.service');
+
+// Mock a function
+const mockCreate = vi.fn();
+
+// Mock Prisma
+const mockPrisma = {
+  task: { create: vi.fn(), findUnique: vi.fn(), findMany: vi.fn() },
+};
+```
+
+## Integration Test Template
+
+```typescript
+describe('POST /api/tasks', () => {
+  it('should create a task and return 201', async () => {
+    const res = await request(app)
+      .post('/api/tasks')
+      .send({ title: 'Test', description: 'Test task' })
+      .expect(201);
+
+    expect(res.body.data).toHaveProperty('id');
+    expect(res.body.data.title).toBe('Test');
+  });
+});
+```

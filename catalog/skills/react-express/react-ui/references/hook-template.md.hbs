@@ -1,0 +1,46 @@
+# React Hook Template
+
+## Data Fetching Hook
+
+```tsx
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { {{pascal name}} } from '../../shared/types';
+
+const API_BASE = '/api/{{kebab name}}s';
+
+async function fetch{{pascal name}}s(): Promise<{{pascal name}}[]> {
+  const res = await fetch(API_BASE);
+  const json = await res.json();
+  return json.data;
+}
+
+export function use{{pascal name}}s() {
+  return useQuery({
+    queryKey: ['{{kebab name}}s'],
+    queryFn: fetch{{pascal name}}s,
+  });
+}
+
+export function useCreate{{pascal name}}() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Create{{pascal name}}Input) => {
+      const res = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['{{kebab name}}s'] }),
+  });
+}
+```
+
+## Conventions
+
+- Hook files: `use[Entity]s.ts` (plural for list hooks)
+- Always invalidate relevant queries on mutation success
+- Handle loading, error, and empty states in consuming components
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — entity-specific hook details -->

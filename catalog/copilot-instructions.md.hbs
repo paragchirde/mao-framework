@@ -1,0 +1,73 @@
+# {{project.name}} — Copilot Instructions
+
+> {{project.description}}
+
+## Project Type
+
+This is a **{{project.type}}** project.
+
+## Tech Stack
+
+- **Preset**: {{stack.preset}}
+{{#if has_frontend}}
+- **Frontend**: {{stack.frontend.framework}} ({{stack.frontend.language}}) + {{stack.frontend.styling}}
+{{/if}}
+{{#if has_backend}}
+- **Backend**: {{stack.backend.framework}} ({{stack.backend.language}})
+{{/if}}
+{{#if has_database}}
+- **Database**: {{stack.database.provider}} via {{stack.database.orm}}
+{{/if}}
+{{#if has_auth}}
+- **Auth**: {{stack.auth.strategy}} ({{stack.auth.session}})
+{{/if}}
+
+## Project Structure
+
+{{#if structure.frontend}}
+- Frontend: `{{structure.frontend}}/`
+{{/if}}
+{{#if structure.backend}}
+- Backend: `{{structure.backend}}/`
+{{/if}}
+{{#if structure.database}}
+- Database: `{{structure.database}}/`
+{{/if}}
+{{#if structure.shared}}
+- Shared types: `{{structure.shared}}/`
+{{/if}}
+
+## Agent Team
+
+This project uses a multi-agent development workflow. The **Orchestrator** coordinates all work.
+
+To start working, use: `@Orchestrator Start Phase 1`
+
+Available agents:
+{{#each agent_list}}
+- `@{{this}}`
+{{/each}}
+
+## Data Model
+
+{{#each entities}}
+- **{{name}}**: {{#each fields}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/each}}
+
+## Implementation Phases
+
+{{#each phases}}
+{{order}}. **{{name}}** — {{description}} (agents: {{join agents ", "}})
+{{/each}}
+
+{{#if custom_skills}}
+## Domain Knowledge
+
+Project-specific skills contain extracted business logic:
+
+{{#each custom_skills}}
+- **{{name}}** — {{description}}
+{{/each}}
+{{/if}}
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — business rules, conventions, domain context -->

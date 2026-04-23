@@ -1,7 +1,7 @@
 # Minimal valid config — POC with SQLite and 4 agents
 project:
-  name: "QuickPOC"
-  description: "Quick proof of concept app"
+  name: 'QuickPOC'
+  description: 'Quick proof of concept app'
   type: poc
 
 stack:
@@ -26,9 +26,9 @@ stack:
     unit: vitest
 
 structure:
-  frontend: "client/src"
-  backend: "server/src"
-  database: "server/prisma"
+  frontend: 'client/src'
+  backend: 'server/src'
+  database: 'server/prisma'
 
 agents:
   - orchestrator
@@ -37,8 +37,8 @@ agents:
   - qa
 
 phases:
-  - name: "Build"
-    description: "Build everything"
+  - name: 'Build'
+    description: 'Build everything'
     agents: [database, backend]
     order: 1
 

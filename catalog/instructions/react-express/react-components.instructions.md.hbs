@@ -1,0 +1,18 @@
+---
+applyTo: "{{structure.frontend}}/components/**,{{structure.frontend}}/pages/**"
+---
+
+# React Components Instructions
+
+When working in React component or page files:
+
+- Use TypeScript with explicit prop interfaces
+- Use named exports for components, default exports only for pages
+- Keep components under 150 lines — extract sub-components if longer
+- Use {{stack.frontend.styling}} for all styling
+{{#if (eq stack.frontend.state_management "tanstack-query")}}
+- Use TanStack Query hooks for data fetching (never raw fetch in components)
+{{/if}}
+- Add aria labels and alt text for accessibility
+- Handle loading, error, and empty states in every data-dependent component
+- Extract reusable logic into custom hooks in `hooks/` directory

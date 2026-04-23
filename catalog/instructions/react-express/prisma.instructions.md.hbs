@@ -1,0 +1,15 @@
+---
+applyTo: "{{structure.database}}/**"
+---
+
+# Prisma Instructions
+
+When working in database files:
+
+- Always run `npx prisma format` after editing `schema.prisma`
+- Use `npx prisma migrate dev --name <description>` for schema changes
+- Include `createdAt` and `updatedAt` on every model
+- Use `@relation` with explicit relation names
+- Add `@@index` for fields used in WHERE clauses
+- Use `@default(uuid())` for id fields
+- Document relations with comments above the field

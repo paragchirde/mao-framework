@@ -1,0 +1,64 @@
+# Error Handling
+
+> Consistent error handling patterns for {{project.name}}.
+
+## When to Use
+
+Load this skill when implementing any error handling, creating services, or writing middleware.
+
+## Error Class Hierarchy
+
+```typescript
+// Base application error
+class AppError extends Error {
+  constructor(
+    public statusCode: number,
+    public code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'AppError';
+  }
+}
+
+class NotFoundError extends AppError {
+  constructor(resource: string, id: string) {
+    super(404, 'NOT_FOUND', `${resource} with id ${id} not found`);
+  }
+}
+
+class ValidationError extends AppError {
+  constructor(message: string) {
+    super(400, 'VALIDATION_ERROR', message);
+  }
+}
+
+class UnauthorizedError extends AppError {
+  constructor(message = 'Authentication required') {
+    super(401, 'UNAUTHORIZED', message);
+  }
+}
+
+class ForbiddenError extends AppError {
+  constructor(message = 'Insufficient permissions') {
+    super(403, 'FORBIDDEN', message);
+  }
+}
+
+class ConflictError extends AppError {
+  constructor(message: string) {
+    super(409, 'CONFLICT', message);
+  }
+}
+```
+
+## Key Rules
+
+- Always throw typed errors (AppError subclasses), never generic Error
+- Catch at the boundary (route handler or global middleware), not in services
+- Log internal details server-side, return safe messages to client
+- Async handlers must be wrapped to catch promise rejections
+
+## References
+
+- [patterns](references/patterns.md)

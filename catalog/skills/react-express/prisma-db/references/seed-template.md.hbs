@@ -1,0 +1,39 @@
+# Prisma Seed Template
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+{{#each entities}}
+  // Seed {{name}}
+  await prisma.{{kebab name}}.createMany({
+    data: [
+      // <!-- ENRICHMENT WILL FILL THIS FROM PRD — sample data -->
+    ],
+    skipDuplicates: true,
+  });
+
+{{/each}}
+  console.log('Seed complete');
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+```
+
+## Conventions
+
+- Seed data must be idempotent (use `skipDuplicates` or upsert)
+- Include at least 3 records per entity for development
+- Use realistic but fake data (no real PII)
+- Seed in dependency order (referenced tables first)
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — domain-appropriate sample data -->

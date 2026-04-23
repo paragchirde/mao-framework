@@ -3,8 +3,8 @@
 # Preset: react-express (React + Express + Prisma + PostgreSQL)
 
 project:
-  name: "TaskForge"
-  description: "Collaborative project management platform for development teams"
+  name: 'TaskForge'
+  description: 'Collaborative project management platform for development teams'
   type: mvp # poc | mvp | production
 
 stack:
@@ -35,10 +35,10 @@ stack:
     hosting: railway
 
 structure:
-  frontend: "client/src"
-  backend: "server/src"
-  database: "server/prisma"
-  shared: "shared"
+  frontend: 'client/src'
+  backend: 'server/src'
+  database: 'server/prisma'
+  shared: 'shared'
 
 agents:
   - orchestrator
@@ -49,20 +49,20 @@ agents:
   - qa
 
 phases:
-  - name: "Foundation"
-    description: "Database schema, authentication, user & workspace CRUD"
+  - name: 'Foundation'
+    description: 'Database schema, authentication, user & workspace CRUD'
     agents: [database, backend, auth]
     order: 1
-  - name: "Core Features"
-    description: "Projects, sprints, tasks with auto-numbering, comments"
+  - name: 'Core Features'
+    description: 'Projects, sprints, tasks with auto-numbering, comments'
     agents: [database, backend, frontend]
     order: 2
-  - name: "Advanced Features"
-    description: "Time logging, sprint capacity, analytics, archival"
+  - name: 'Advanced Features'
+    description: 'Time logging, sprint capacity, analytics, archival'
     agents: [database, backend, frontend]
     order: 3
-  - name: "Polish"
-    description: "Dashboard, real-time updates, search, error handling"
+  - name: 'Polish'
+    description: 'Dashboard, real-time updates, search, error handling'
     agents: [frontend, backend, qa]
     order: 4
 
@@ -139,22 +139,22 @@ entities:
 
 custom_skills:
   - name: task-numbering
-    description: "Auto-generation of sequential task numbers per project (BR-1)"
+    description: 'Auto-generation of sequential task numbers per project (BR-1)'
     agents: [backend, database]
     references:
       - algorithm.md
   - name: sprint-capacity
-    description: "Sprint capacity calculation from story points and team velocity (BR-2)"
+    description: 'Sprint capacity calculation from story points and team velocity (BR-2)'
     agents: [backend, frontend]
     references:
       - formula.md
   - name: task-workflow
-    description: "Task status transition rules and validation (BR-3)"
+    description: 'Task status transition rules and validation (BR-3)'
     agents: [backend, frontend]
     references:
       - state-machine.md
   - name: time-logging
-    description: "Time entry constraints and daily limit validation (BR-4)"
+    description: 'Time entry constraints and daily limit validation (BR-4)'
     agents: [backend]
     references:
       - validation-rules.md

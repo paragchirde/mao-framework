@@ -1,0 +1,40 @@
+# Testing Patterns
+
+> Test structure and conventions for {{project.name}}.
+
+## When to Use
+
+Load this skill when writing any tests — unit, integration, or component tests.
+
+## Test Structure
+
+```typescript
+describe('[ModuleName]', () => {
+  describe('[functionName]', () => {
+    it('should [expected behavior] when [condition]', () => {
+      // Arrange
+      // Act
+      // Assert
+    });
+  });
+});
+```
+
+## Naming Convention
+
+- Test files: `*.test.ts` or `*.test.tsx`
+- Describe blocks: module or class name
+- It blocks: `should [verb] when [condition]`
+
+## Key Rules
+
+- Each test must be independent — no shared mutable state
+- Use `beforeEach` for setup, not `beforeAll` (unless expensive)
+- Mock external dependencies (database, APIs, file system)
+- Test both happy paths and error cases
+- Test boundary conditions (empty arrays, null values, max values)
+- One assertion concept per test (multiple expects are OK if related)
+
+## References
+
+- [patterns](references/patterns.md)

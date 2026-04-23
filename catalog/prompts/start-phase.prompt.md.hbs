@@ -1,0 +1,24 @@
+---
+name: "Start Phase"
+description: "Begin implementation of a specific project phase"
+---
+
+# Start Phase
+
+I want to begin implementing **Phase {{ "{{phase_number}}" }}** of {{project.name}}.
+
+## Context
+
+Please:
+1. Review the phase plan and identify all tasks
+2. Check dependencies — verify prerequisites from prior phases are complete
+3. Break down into ordered tasks with file paths and acceptance criteria
+4. Present the task list for my approval before starting
+5. Delegate each task to the appropriate specialist agent
+6. After all tasks, run QA verification
+
+## Available Agents
+
+{{#each agent_list}}
+- @{{this}}
+{{/each}}

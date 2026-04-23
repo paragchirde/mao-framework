@@ -1,0 +1,44 @@
+# Express Route Template
+
+## File Structure
+
+```
+{{structure.backend}}/
+├── routes/
+│   ├── index.ts          ← Central route registration
+{{#each entities}}
+│   ├── {{kebab name}}.routes.ts
+{{/each}}
+├── services/
+{{#each entities}}
+│   ├── {{kebab name}}.service.ts
+{{/each}}
+├── validators/
+{{#each entities}}
+│   ├── {{kebab name}}.validator.ts
+{{/each}}
+└── middleware/
+    ├── async-handler.ts
+    ├── validate.ts
+    └── error-handler.ts
+```
+
+## Route Registration
+
+```typescript
+// routes/index.ts
+import { Router } from 'express';
+{{#each entities}}
+import {{kebab name}}Routes from './{{kebab name}}.routes';
+{{/each}}
+
+const router = Router();
+
+{{#each entities}}
+router.use('/{{kebab name}}s', {{kebab name}}Routes);
+{{/each}}
+
+export default router;
+```
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — entity-specific route details -->

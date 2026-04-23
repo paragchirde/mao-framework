@@ -1,0 +1,55 @@
+# Express API
+
+> Route and service patterns for {{project.name}} using Express.
+
+## When to Use
+
+Load this skill when creating or modifying API routes, services, or middleware.
+
+## Route Pattern
+
+```typescript
+// {{structure.backend}}/routes/[resource].routes.ts
+import { Router } from 'express';
+import { asyncHandler } from '../middleware/async-handler';
+import { validate } from '../middleware/validate';
+import { [Resource]Schema } from '../validators/[resource].validator';
+import * as [resource]Service from '../services/[resource].service';
+
+const router = Router();
+
+router.get('/', asyncHandler(async (req, res) => {
+  const data = await [resource]Service.findAll(req.query);
+  res.json({ data });
+}));
+
+router.get('/:id', asyncHandler(async (req, res) => {
+  const data = await [resource]Service.findById(req.params.id);
+  res.json({ data });
+}));
+
+router.post('/', validate([Resource]Schema), asyncHandler(async (req, res) => {
+  const data = await [resource]Service.create(req.body);
+  res.status(201).json({ data });
+}));
+
+export default router;
+```
+
+## Service Pattern
+
+- Services contain business logic, routes are thin controllers
+- Services receive validated data and return domain objects
+- Services throw typed AppError subclasses on failure
+
+## Key Rules
+
+- Every route must use `asyncHandler` wrapper
+- Every POST/PUT/PATCH must validate request body
+- Never access `prisma` directly in routes — always go through services
+- Register routes in a central `routes/index.ts`
+
+## References
+
+- [route-template](references/route-template.md)
+- [validator-template](references/validator-template.md)

@@ -1,0 +1,44 @@
+# Auth — {{stack.auth.strategy}}
+
+> Authentication patterns for {{project.name}} using {{stack.auth.strategy}}.
+
+## When to Use
+
+Load this skill when implementing login, registration, auth middleware, session management, or frontend auth guards.
+
+## Auth Flow
+
+{{#if (eq stack.auth.strategy "google-oauth")}}
+1. User clicks "Sign in with Google"
+2. Frontend redirects to `/api/auth/google`
+3. Server redirects to Google OAuth consent screen
+4. Google redirects back to `/api/auth/google/callback`
+5. Server validates token, creates/finds user, issues {{stack.auth.session}} token
+6. Frontend stores token and includes in subsequent requests
+{{/if}}
+{{#if (eq stack.auth.strategy "email-password")}}
+1. User submits email + password to `/api/auth/register` or `/api/auth/login`
+2. Server validates credentials, issues {{stack.auth.session}} token
+3. Frontend stores token and includes in subsequent requests
+{{/if}}
+
+## Session: {{stack.auth.session}}
+
+{{#if (eq stack.auth.session "jwt")}}
+- Store JWT in httpOnly secure cookie (preferred) or Authorization header
+- Token payload: `{ userId, email, role }`
+- Token expiry: 15 min access token + 7 day refresh token
+- Refresh endpoint: `POST /api/auth/refresh`
+{{/if}}
+
+## Key Rules
+
+- Never store passwords in plain text — always hash with bcrypt (12 rounds)
+- Never expose tokens in URLs or logs
+- Always validate token on every protected route
+- Use environment variables for secrets (JWT_SECRET, GOOGLE_CLIENT_ID)
+
+## References
+
+- [auth-flow](references/auth-flow.md)
+- [middleware-template](references/middleware-template.md)

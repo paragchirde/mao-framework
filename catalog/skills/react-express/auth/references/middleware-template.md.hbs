@@ -1,0 +1,54 @@
+# Auth Middleware Template
+
+## Authentication Middleware
+
+```typescript
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+
+export interface AuthRequest extends Request {
+  userId?: string;
+  userRole?: string;
+}
+
+export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
+  {{#if (eq stack.auth.session "jwt")}}
+  const token = req.cookies?.accessToken || req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ error: 'UNAUTHORIZED', message: 'No token provided' });
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string; role: string };
+    req.userId = payload.userId;
+    req.userRole = payload.role;
+    next();
+  } catch {
+    return res.status(401).json({ error: 'UNAUTHORIZED', message: 'Invalid or expired token' });
+  }
+  {{/if}}
+}
+```
+
+## Authorization Middleware
+
+```typescript
+export function authorize(...allowedRoles: string[]) {
+  return (req: AuthRequest, res: Response, next: NextFunction) => {
+    if (!req.userRole || !allowedRoles.includes(req.userRole)) {
+      return res.status(403).json({ error: 'FORBIDDEN', message: 'Insufficient permissions' });
+    }
+    next();
+  };
+}
+```
+
+## Usage
+
+```typescript
+router.get('/admin', authenticate, authorize('ADMIN'), adminHandler);
+router.get('/profile', authenticate, profileHandler);
+```
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — role-specific middleware -->

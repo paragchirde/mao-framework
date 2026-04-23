@@ -1,0 +1,15 @@
+---
+applyTo: "{{structure.backend}}/services/**"
+---
+
+# Services Instructions
+
+When working in service files:
+
+- Services contain all business logic — routes call services, never ORM directly
+- Accept validated input types, return domain objects
+- Throw typed AppError subclasses (NotFoundError, ValidationError, etc.)
+- Use Prisma transactions for multi-model writes
+- Keep services focused — one service per entity/domain
+- Never import Express types (Request, Response) in services
+- Always handle the "not found" case when looking up by ID

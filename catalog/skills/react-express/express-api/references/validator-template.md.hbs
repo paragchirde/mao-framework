@@ -1,0 +1,41 @@
+# Express Validator Template
+
+## Zod Validation Pattern
+
+```typescript
+// validators/[resource].validator.ts
+import { z } from 'zod';
+
+export const Create{{pascal name}}Schema = z.object({
+  // <!-- ENRICHMENT WILL FILL THIS FROM PRD — fields, types, constraints -->
+});
+
+export const Update{{pascal name}}Schema = Create{{pascal name}}Schema.partial();
+
+export type Create{{pascal name}}Input = z.infer<typeof Create{{pascal name}}Schema>;
+export type Update{{pascal name}}Input = z.infer<typeof Update{{pascal name}}Schema>;
+```
+
+## Validation Middleware
+
+```typescript
+// middleware/validate.ts
+import { Request, Response, NextFunction } from 'express';
+import { ZodSchema } from 'zod';
+
+export function validate(schema: ZodSchema) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: result.error.issues.map(i => i.message).join(', '),
+      });
+    }
+    req.body = result.data;
+    next();
+  };
+}
+```
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — entity-specific validators with domain constraints -->

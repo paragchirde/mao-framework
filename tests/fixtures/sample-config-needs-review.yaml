@@ -1,7 +1,7 @@
 # Config with NEEDS_REVIEW flags — Analyzer output before human review
 project:
-  name: "TaskForge"
-  description: "NEEDS_REVIEW: Confirm project description"
+  name: 'TaskForge'
+  description: 'NEEDS_REVIEW: Confirm project description'
   type: mvp
 
 stack:
@@ -9,7 +9,7 @@ stack:
   frontend:
     framework: react
     language: typescript
-    styling: "NEEDS_REVIEW: tailwindcss or styled-components?"
+    styling: 'NEEDS_REVIEW: tailwindcss or styled-components?'
   backend:
     framework: express
     language: typescript
@@ -18,7 +18,18 @@ stack:
     provider: postgresql
     orm: prisma
   auth:
-    strategy: "NEEDS_REVIEW: google-oauth or auth0?"
+    strategy: 'NEEDS_REVIEW: google-oauth or auth0?'
     providers:
       - google
     session: jwt
+
+agents:
+  - orchestrator
+  - backend
+  - database
+
+phases:
+  - name: 'Build'
+    description: 'NEEDS_REVIEW: What should phase 1 cover?'
+    agents: [backend, database]
+    order: 1

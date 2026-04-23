@@ -1,0 +1,45 @@
+# React Page Template
+
+## Page Structure
+
+```tsx
+// {{structure.frontend}}/pages/{{pascal name}}Page.tsx
+import { use{{pascal name}}s } from '../hooks/use{{pascal name}}s';
+
+export function {{pascal name}}Page() {
+  const { data, isLoading, error } = use{{pascal name}}s();
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+
+  return (
+    <div>
+      <h1>{{pascal name}}s</h1>
+      {/* page content */}
+    </div>
+  );
+}
+```
+
+## File Structure
+
+```
+{{structure.frontend}}/
+├── pages/
+{{#each entities}}
+│   ├── {{pascal name}}Page.tsx
+{{/each}}
+├── components/
+│   ├── common/        ← Shared UI (Button, Modal, Table)
+{{#each entities}}
+│   ├── {{kebab name}}/  ← Entity-specific components
+{{/each}}
+├── hooks/
+{{#each entities}}
+│   ├── use{{pascal name}}s.ts
+{{/each}}
+└── layouts/
+    └── MainLayout.tsx
+```
+
+<!-- ENRICHMENT WILL FILL THIS FROM PRD — entity-specific page details -->

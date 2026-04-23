@@ -1,0 +1,45 @@
+# API Conventions Reference
+
+## Endpoint Pattern
+
+```
+[METHOD] /api/[resource]         → list / create
+[METHOD] /api/[resource]/:id     → get / update / delete
+[METHOD] /api/[resource]/:id/[action] → custom action
+```
+
+## Pagination
+
+Use offset-based pagination by default:
+
+```
+GET /api/tasks?page=1&limit=20
+
+Response:
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 150,
+    "totalPages": 8
+  }
+}
+```
+
+## Error Codes
+
+Use UPPER_SNAKE_CASE error codes:
+
+- `VALIDATION_ERROR` — request body/params failed validation
+- `NOT_FOUND` — resource does not exist
+- `UNAUTHORIZED` — missing or invalid auth token
+- `FORBIDDEN` — valid token but insufficient permissions
+- `CONFLICT` — duplicate or state conflict
+- `INTERNAL_ERROR` — unexpected server error
+
+## Versioning
+
+{{#if (eq stack.backend.api_type "rest")}}
+No URL versioning for MVP. Use header versioning if needed later.
+{{/if}}

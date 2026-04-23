@@ -24,12 +24,12 @@ program
   .option('--verbose', 'Show detailed validation results')
   .action(async (options) => {
     try {
-      const passed = await activate({
+      const result = await activate({
         configPath: options.config as string,
         githubDir: options.dir as string,
         verbose: options.verbose as boolean | undefined,
       });
-      process.exit(passed ? 0 : 1);
+      process.exit(result.passed ? 0 : 1);
     } catch (error) {
       console.error(
         error instanceof Error ? error.message : 'Activation check failed with an unknown error',

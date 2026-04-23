@@ -1,0 +1,47 @@
+# Error Handling Patterns
+
+## Async Handler Wrapper
+
+```typescript
+const asyncHandler = (fn: RequestHandler): RequestHandler => {
+  return (req, res, next) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};
+```
+
+## Global Error Middleware
+
+```typescript
+const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      error: err.code,
+      message: err.message,
+    });
+  }
+
+  // Unexpected error — log and return generic message
+  console.error('Unexpected error:', err);
+  return res.status(500).json({
+    error: 'INTERNAL_ERROR',
+    message: 'An unexpected error occurred',
+  });
+};
+```
+
+## Service Error Pattern
+
+```typescript
+async function getTaskById(id: string): Promise<Task> {
+  const task = await prisma.task.findUnique({ where: { id } });
+  if (!task) throw new NotFoundError('Task', id);
+  return task;
+}
+```
+
+## Never Do
+
+- `catch (e) { /* swallow */ }` — never silently swallow errors
+- `res.status(500).json({ error: err.message })` — never expose raw error messages
+- `throw new Error("not found")` — always use typed AppError subclasses

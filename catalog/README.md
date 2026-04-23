@@ -16,12 +16,12 @@ catalog/
 
 ## Conventions
 
-| Aspect | Convention |
-|--------|-----------|
-| **Agent templates** | `{role}.agent.md.hbs` — orchestrator prefixed with `_` to sort first |
-| **Skill directories** | `{skill-name}/SKILL.md.hbs` + `references/{ref-name}.md.hbs` |
-| **Instructions** | `{context}.instructions.md.hbs` |
-| **Path mapping** | Template path → output path: strip `catalog/` prefix, remove `.hbs` extension |
+| Aspect                | Convention                                                                    |
+| --------------------- | ----------------------------------------------------------------------------- |
+| **Agent templates**   | `{role}.agent.md.hbs` — orchestrator prefixed with `_` to sort first          |
+| **Skill directories** | `{skill-name}/SKILL.md.hbs` + `references/{ref-name}.md.hbs`                  |
+| **Instructions**      | `{context}.instructions.md.hbs`                                               |
+| **Path mapping**      | Template path → output path: strip `catalog/` prefix, remove `.hbs` extension |
 
 ## Template Context
 
