@@ -20,7 +20,7 @@ program
   .description('Generate VS Code Copilot agent setup from mao.config.yaml')
   .version('0.1.0')
   .option('-c, --config <path>', 'Path to mao.config.yaml', 'mao.config.yaml')
-  .option('-o, --output <dir>', 'Output directory', '.')
+  .option('-o, --output <dir>', 'Output directory', '.github')
   .option('--merge', 'Re-scaffold with three-way merge strategy')
   .option('--force', 'Overwrite all existing files (with confirmation)')
   .option('--dry-run', 'Preview generated files without writing')

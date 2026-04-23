@@ -65,7 +65,7 @@ program
   .description('Guided MAO setup — walks through the full pipeline')
   .version('0.1.0')
   .option('-c, --config <path>', 'Path to mao.config.yaml', 'mao.config.yaml')
-  .option('-o, --output <dir>', 'Output directory', '.')
+  .option('-o, --output <dir>', 'Output directory', '.github')
   .action(async (options) => {
     const configPath = options.config as string;
     const outputDir = options.output as string;
@@ -202,7 +202,7 @@ program
 
       const result = await activate({
         configPath,
-        githubDir: `${outputDir}/.github`,
+        githubDir: outputDir,
         verbose: true,
       });
 
