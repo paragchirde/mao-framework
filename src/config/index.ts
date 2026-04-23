@@ -11,3 +11,4 @@ export type { PresetDefinition } from './presets.js';
 export { presetDefaults } from './defaults.js';
 export { detectStack } from './detect.js';
 export type { DetectedStack, DetectionResult } from './detect.js';
+export { warnConfigIssues } from './warnings.js';

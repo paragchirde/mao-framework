@@ -22,54 +22,78 @@ PRD → [Analyze] → Config → [Review] → [Scaffold] → .github/ → [Enric
        (LLM)              (Human)    (Deterministic)            (LLM)     (Human)    (Deterministic)
 ```
 
+## Features
+
+- **Declarative config** — Define your project stack, agents, and phases in YAML
+- **Smart scaffolding** — Handlebars templates generate production-quality agent definitions
+- **Three-way merge** — Re-scaffold safely with `--merge` — your customizations are preserved
+- **Stack auto-detection** — Infer config from existing `package.json`, `prisma/schema.prisma`, etc.
+- **Custom skills** — Define project-specific skills enriched from your PRD
+- **Community skills** — Use and contribute reusable skill packs
+- **Activation validation** — Verify completeness before going live
+
 ## Quick Start
 
 ```bash
 # 1. Use this template
 gh repo create my-project --template mao-framework/mao-framework
+cd my-project && pnpm install
 
-# 2. Install dependencies
-pnpm install
-
-# 3. Place your PRD
-cp your-prd.md ./prd.md
-
-# 4. Run the Analyzer (VS Code Copilot Chat)
+# 2. Analyze your PRD (VS Code Copilot Chat)
 # @Analyzer Analyze the PRD at ./prd.md and generate mao.config.yaml
 
-# 5. Review the generated config
-# Edit mao.config.yaml — resolve any NEEDS_REVIEW flags
+# 3. Review and edit mao.config.yaml — resolve any NEEDS_REVIEW flags
 
-# 6. Scaffold
+# 4. Scaffold the agent setup
 pnpm scaffold
 
-# 7. Run the Enricher (VS Code Copilot Chat)
+# 5. Enrich with project-specific content (VS Code Copilot Chat)
 # @Enricher Enrich the generated agent setup from the PRD
 
-# 8. Review enriched files
-
-# 9. Activate (validate)
+# 6. Validate and activate
 pnpm activate
 
-# 10. Start coding with your agent team!
+# 7. Start coding with your agent team!
 # @Orchestrator Start Phase 1
 ```
 
+See [Getting Started](docs/getting-started.md) for the full walkthrough.
+
 ## Current Preset
 
-- **react-express** — React + Express + Prisma + PostgreSQL
+- **react-express** — React + Express + Prisma + PostgreSQL (6 agents, 7 skills, 4 instructions)
+
+## Generated Agents
+
+| Agent            | Role                                           |
+| ---------------- | ---------------------------------------------- |
+| **Orchestrator** | Plans, delegates, verifies — never writes code |
+| **Database**     | Schema, migrations, seed data                  |
+| **Backend**      | Routes, services, middleware                   |
+| **Frontend**     | Components, pages, hooks                       |
+| **Auth**         | Authentication flow and guards                 |
+| **QA**           | Testing and review (read-only)                 |
+
+## CLI
+
+```bash
+pnpm scaffold                    # First-time scaffold
+pnpm scaffold -- --merge         # Re-scaffold preserving edits
+pnpm scaffold -- --dry-run       # Preview without writing
+pnpm activate                    # Validate completeness
+```
 
 ## Project Structure
 
 ```
 mao-framework/
 ├── bin/          → CLI entry points (mao-scaffold, mao-activate)
-├── src/          → Core engine (config, scaffold, renderer, validator)
+├── src/          → Core engine (config, scaffold, renderer, validator, merge)
 ├── catalog/      → Handlebars templates for agents, skills, instructions
-├── tests/        → Unit, integration, E2E tests
+├── tests/        → Unit, integration, E2E tests (100+ tests)
 ├── docs/         → Documentation
-├── examples/     → Example configurations and outputs
-└── community/    → Community skill contributions
+├── community/    → Community skill contributions
+└── .github/      → Framework agents (Analyzer, Enricher)
 ```
 
 ## Development
@@ -77,22 +101,25 @@ mao-framework/
 ```bash
 pnpm install          # Install dependencies
 pnpm build            # Build CLI
-pnpm test             # Run tests
-pnpm test:watch       # Watch mode
-pnpm lint             # Lint
+pnpm test             # Run unit tests
+pnpm test:e2e         # Run end-to-end tests
 pnpm typecheck        # Type check
+pnpm lint             # Lint
 pnpm format           # Format code
 ```
 
 ## Documentation
 
-- [Getting Started](docs/getting-started.md) _(coming soon)_
-- [Config Reference](docs/config-reference.md) _(coming soon)_
-- [Agent Catalog](docs/agent-catalog.md) _(coming soon)_
+- [Getting Started](docs/getting-started.md) — Full setup walkthrough
+- [Config Reference](docs/config-reference.md) — Every field, valid value, and default
+- [Agent Catalog](docs/agent-catalog.md) — 6 core agents with descriptions and scope
+- [Skill Packs](docs/skill-packs.md) — react-express preset contents and file tree
+- [Merge Strategy](docs/merge-strategy.md) — How re-scaffolding preserves your edits
+- [Contributing Skills](docs/contributing-skills.md) — How to create community skills
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) _(coming soon)_
+Community skill contributions welcome. See [Contributing Skills](docs/contributing-skills.md) and the [community/TEMPLATE/](community/TEMPLATE/) starter.
 
 ## License
 
