@@ -16,18 +16,18 @@ Each agent is a specialist — one handles the database, another writes API rout
 
 ### How It Works (6 Steps)
 
-```
-  Your PRD
-     ↓
-  1. Analyze    — AI reads your PRD, extracts requirements
-  2. Review     — You check and adjust the generated config
-  3. Scaffold   — MAO generates agent files into .github/
-  4. Enrich     — AI fills in project-specific details
-  5. Review     — You verify the enriched content
-  6. Activate   — MAO validates everything is complete
-     ↓
-  Working AI Agent Team in VS Code
-```
+| Step            | What happens                                                                                                                                                                                                                          | Who does it         | Command / Action                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------- |
+| **1. Analyze**  | AI reads your PRD and extracts entities, tech stack, business rules, and development phases into a structured config file (`mao.config.yaml`)                                                                                         | AI (Copilot Chat)   | In VS Code Chat: `@Analyzer Analyze the PRD at ./prd.md and generate mao.config.yaml` |
+| **2. Review**   | You check the generated config. The AI may flag uncertain choices as `NEEDS_REVIEW` — you resolve these by picking the right value. This is your chance to adjust agents, phases, or tech stack choices before anything is generated. | You (Human)         | Open `mao.config.yaml` in your editor and review/edit                                 |
+| **3. Scaffold** | MAO reads the validated config and generates all agent files, skills, instructions, hooks, and prompts into `.github/`. Custom skills are created as stubs with placeholder content.                                                  | MAO (Deterministic) | `pnpm scaffold`                                                                       |
+| **4. Enrich**   | AI reads your PRD again and fills in the stub files with project-specific content — algorithms, validation rules, code patterns, entity schemas. This is what makes agents actually useful for _your_ project.                        | AI (Copilot Chat)   | In VS Code Chat: `@Enricher Enrich the generated agent setup from the PRD`            |
+| **5. Review**   | You verify the enriched content is accurate. Check that business rules are correct, code patterns match your standards, and no `<!-- NEEDS_HUMAN_REVIEW -->` markers remain unresolved.                                               | You (Human)         | Review files in `.github/skills/` and `.github/agents/`                               |
+| **6. Activate** | MAO validates the entire `.github/` directory — checks that every agent has a file, every skill has content, no placeholders remain, and the orchestrator references all configured agents correctly.                                 | MAO (Deterministic) | `pnpm activate`                                                                       |
+
+> **Why 6 steps instead of 1?** AI is powerful but imperfect. The two human review gates (Steps 2 and 5) catch mistakes before they propagate. A wrong entity in the config (Step 2) would produce wrong schemas, wrong routes, and wrong tests. Reviewing early saves hours of fixing later.
+
+**Or run it all guided:** `pnpm setup-mao` walks you through every step interactively, pausing at each review gate.
 
 ---
 
