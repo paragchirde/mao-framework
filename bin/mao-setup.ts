@@ -3,9 +3,9 @@
  * MAO Setup CLI — Guided pipeline that runs the full 6-step setup.
  *
  * Usage:
- *   pnpm setup                          → Interactive guided setup
- *   pnpm setup -- --config <path>       → Use existing config
- *   pnpm setup -- --output <dir>        → Custom output directory
+ *   pnpm setup-mao                      → Interactive guided setup
+ *   pnpm setup-mao -- --config <path>   → Use existing config
+ *   pnpm setup-mao -- --output <dir>    → Custom output directory
  */
 
 import { Command } from 'commander';
@@ -118,7 +118,7 @@ program
           }
         }
 
-        gate('Create mao.config.yaml, then re-run: pnpm setup');
+        gate('Create mao.config.yaml, then re-run: pnpm setup-mao');
         rl.close();
         return;
       }
@@ -144,7 +144,7 @@ program
           for (const loc of needsReviewLocations) {
             console.log(chalk.dim(`    • ${loc}`));
           }
-          gate('Resolve all NEEDS_REVIEW flags in mao.config.yaml, then re-run: pnpm setup');
+          gate('Resolve all NEEDS_REVIEW flags in mao.config.yaml, then re-run: pnpm setup-mao');
           rl.close();
           return;
         }
@@ -154,7 +154,7 @@ program
           for (const issue of error.issues) {
             console.log(chalk.red(`    • ${issue.path}: ${issue.message}`));
           }
-          gate('Fix config errors, then re-run: pnpm setup');
+          gate('Fix config errors, then re-run: pnpm setup-mao');
           rl.close();
           return;
         }
