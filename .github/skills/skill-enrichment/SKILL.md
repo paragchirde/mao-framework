@@ -6,11 +6,19 @@
 
 Load this skill when enriching scaffolded `.github/` skill stubs after the scaffold step.
 
+## Before You Start
+
+Read these references in order:
+
+1. **`references/enrichment-example.md`** — Golden before→after examples. **This is your quality bar.**
+2. **`references/enrichment-rules.md`** — File inventory (which files need enrichment) and priority order.
+3. **`references/quality-markers.md`** — Confidence levels, minimum content thresholds, and verification checklist.
+
 ## Enrichment Procedure
 
-### 1. Find Stubs
+### 1. Inventory
 
-Search for `<!-- ENRICHMENT WILL FILL THIS -->` markers in all files under `.github/`.
+Scan `.github/` for all `<!-- ENRICHMENT WILL FILL THIS FROM PRD -->` markers. Report the count.
 
 ### 2. Custom Skill Enrichment
 
@@ -21,18 +29,20 @@ For each custom skill in `mao.config.yaml`:
 3. Extract:
    - **Algorithms** — step-by-step logic, formulas, pseudocode
    - **Data structures** — input/output types, constraints
-   - **Edge cases** — boundary conditions, error scenarios
+   - **Edge cases** — boundary conditions, error scenarios (minimum 2)
    - **Business rules** — validation logic, state machines
-4. Write to `references/*.md` with structured format
+4. Write SKILL.md: "When to Use" (≥3 bullets), "Procedure" (≥4 steps), "Key Rules" (≥3 bullets)
+5. Write references: Overview, Algorithm/Logic, Types, Edge Cases, Examples
 
 ### 3. Stack Skill Enrichment
 
 For each stack skill reference (schema-template, seed-template, etc.):
 
-1. Replace generic entity placeholders with real entities from config
-2. Add domain-specific field constraints
-3. Generate realistic seed data
-4. Add domain-specific validation rules
+1. Replace `<!-- ENRICHMENT -->` markers with real domain content
+2. Add domain-specific field constraints, relations, and indexes
+3. Generate realistic seed data (3–5 records per entity)
+4. Add domain-specific validation rules and enum values
+5. Every entity from config must appear in schema-template, seed-template, and validator-template
 
 ### 4. Orchestrator Enrichment
 
@@ -40,17 +50,23 @@ Add detailed phase task breakdown:
 
 - Specific file paths to create/modify
 - Dependencies between tasks
-- Acceptance criteria per task
-- Estimated complexity
+- Acceptance criteria per task (at least one line each)
+- ≥3 tasks per phase
 
 ### 5. Copilot Instructions Enrichment
 
 Add to the workspace-level instructions:
 
-- Business domain context
+- Business domain context (≥3 sentences)
 - Key business rules (summarized)
 - Naming conventions specific to the domain
-- Common patterns used across the project
+- All entity names from config mentioned
+
+### 6. Verification (MANDATORY)
+
+- Re-scan: zero `<!-- ENRICHMENT WILL FILL THIS -->` markers remaining
+- Check minimum thresholds from quality-markers.md
+- List all `NEEDS_HUMAN_REVIEW` tags
 
 ## Quality Markers
 
@@ -58,12 +74,14 @@ Add to the workspace-level instructions:
 
 - **HIGH** — Directly stated in PRD with clear specification
 - **MEDIUM** — Inferred from PRD context, reasonable interpretation
-- **LOW** — Partially specified, gaps filled with common patterns
+- **LOW** — Partially specified, gaps filled with common patterns → must also add `NEEDS_HUMAN_REVIEW`
 
 ### Traceability Format
 
+Every enriched section must have both comments:
+
 ```markdown
-<!-- Source: PRD §X.X — "[quoted text from PRD]" -->
+<!-- Source: PRD §X.X — "[quoted text or summary]" -->
 <!-- Confidence: HIGH|MEDIUM|LOW -->
 ```
 
@@ -75,6 +93,7 @@ Use when:
 - Multiple valid interpretations exist
 - Business logic requires domain expertise to validate
 - Formula or calculation needs verification
+- Confidence is LOW
 
 Format:
 
@@ -84,5 +103,6 @@ Format:
 
 ## References
 
-- [enrichment-rules](references/enrichment-rules.md)
-- [quality-markers](references/quality-markers.md)
+- [enrichment-example](references/enrichment-example.md) — **Read first.** Golden before→after examples.
+- [enrichment-rules](references/enrichment-rules.md) — File inventory and priority order.
+- [quality-markers](references/quality-markers.md) — Minimum thresholds and verification checklist.

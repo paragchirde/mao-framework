@@ -16,14 +16,14 @@ Each agent is a specialist — one handles the database, another writes API rout
 
 ### How It Works (6 Steps)
 
-| Step            | What happens                                                                                                                                                                                                                          | Who does it         | Command / Action                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------- |
-| **1. Analyze**  | AI reads your PRD and extracts entities, tech stack, business rules, and development phases into a structured config file (`mao.config.yaml`)                                                                                         | AI (Copilot Chat)   | In VS Code Chat: `@Analyzer Analyze the PRD at ./prd.md and generate mao.config.yaml` |
-| **2. Review**   | You check the generated config. The AI may flag uncertain choices as `NEEDS_REVIEW` — you resolve these by picking the right value. This is your chance to adjust agents, phases, or tech stack choices before anything is generated. | You (Human)         | Open `mao.config.yaml` in your editor and review/edit                                 |
-| **3. Scaffold** | MAO reads the validated config and generates all agent files, skills, instructions, hooks, and prompts into `.github/`. Custom skills are created as stubs with placeholder content.                                                  | MAO (Deterministic) | `pnpm scaffold`                                                                       |
-| **4. Enrich**   | AI reads your PRD again and fills in the stub files with project-specific content — algorithms, validation rules, code patterns, entity schemas. This is what makes agents actually useful for _your_ project.                        | AI (Copilot Chat)   | In VS Code Chat: `@Enricher Enrich the generated agent setup from the PRD`            |
-| **5. Review**   | You verify the enriched content is accurate. Check that business rules are correct, code patterns match your standards, and no `<!-- NEEDS_HUMAN_REVIEW -->` markers remain unresolved.                                               | You (Human)         | Review files in `.github/skills/` and `.github/agents/`                               |
-| **6. Activate** | MAO validates the entire `.github/` directory — checks that every agent has a file, every skill has content, no placeholders remain, and the orchestrator references all configured agents correctly.                                 | MAO (Deterministic) | `pnpm activate`                                                                       |
+| Step            | What happens                                                                                                                                                                                                                                                                                                                            | Who does it         | Command / Action                                                                      |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------- |
+| **1. Analyze**  | AI reads your PRD and extracts entities, tech stack, business rules, and development phases into `mao.config.yaml`. All values are validated against a strict schema — uncertain choices are flagged as `# NEEDS_REVIEW: reason`. PRD quality (Comprehensive / Standard / Minimal) affects how many flags are generated.                | AI (Copilot Chat)   | In VS Code Chat: `@Analyzer Analyze the PRD at ./prd.md and generate mao.config.yaml` |
+| **2. Review**   | You check the generated config. Look for `# NEEDS_REVIEW: reason` inline YAML comments — these are choices the AI wasn't sure about. Resolve each one by picking the right value. This is your chance to adjust agents, phases, or tech stack before anything is generated.                                                             | You (Human)         | Open `mao.config.yaml` in your editor and review/edit                                 |
+| **3. Scaffold** | MAO reads the validated config and generates all agent files, skills, instructions, hooks, and prompts into `.github/`. Custom skills are created as stubs with placeholder content.                                                                                                                                                    | MAO (Deterministic) | `pnpm scaffold`                                                                       |
+| **4. Enrich**   | AI reads your PRD again and fills 13+ scaffolded stub files with project-specific content. Enrichment follows a strict priority order: DB schemas → API validators → custom skills → auth/UI templates → seed data → orchestrator phase plan → `copilot-instructions.md`. This is what makes agents actually useful for _your_ project. | AI (Copilot Chat)   | In VS Code Chat: `@Enricher Enrich the generated agent setup from the PRD`            |
+| **5. Review**   | You verify the enriched content is accurate. Check that business rules are correct, code patterns match your standards, and no `<!-- NEEDS_HUMAN_REVIEW -->` markers remain unresolved.                                                                                                                                                 | You (Human)         | Review files in `.github/skills/` and `.github/agents/`                               |
+| **6. Activate** | MAO validates the entire `.github/` directory — checks that every agent has a file, every skill has content, no placeholders remain, and the orchestrator references all configured agents correctly.                                                                                                                                   | MAO (Deterministic) | `pnpm activate`                                                                       |
 
 > **Why 6 steps instead of 1?** AI is powerful but imperfect. The two human review gates (Steps 2 and 5) catch mistakes before they propagate. A wrong entity in the config (Step 2) would produce wrong schemas, wrong routes, and wrong tests. Reviewing early saves hours of fixing later.
 
@@ -139,11 +139,19 @@ Running `pnpm scaffold` creates a `.github/` directory with your entire agent te
 └── copilot-instructions.md  ← Project-wide context for all agents
 ```
 
+> **After Step 4 (Enrich):** `copilot-instructions.md` and the orchestrator agent are filled with project-specific domain context. All other files marked with `<!-- ENRICHMENT WILL FILL THIS FROM PRD -->` are stubs until enrichment runs.
+
 ## Current Preset
 
-- **react-express** — React + Express + Prisma + PostgreSQL (6 agents, 7 skills, 4 instructions)
+| Preset          | Status                             | Stack                                                                      |
+| --------------- | ---------------------------------- | -------------------------------------------------------------------------- |
+| `react-express` | **Fully supported**                | React + Express + Prisma + PostgreSQL (6 agents, 7 skills, 4 instructions) |
+| `custom`        | **Supported**                      | No preset templates — you provide all skill content                        |
+| `nextjs`        | Schema-valid, **no templates yet** | ⚠️ Will fail scaffold — do not use                                         |
+| `react-python`  | Schema-valid, **no templates yet** | ⚠️ Will fail scaffold — do not use                                         |
+| `vue-node`      | Schema-valid, **no templates yet** | ⚠️ Will fail scaffold — do not use                                         |
 
-More presets (Next.js, Vue, Python) coming after v1.0.
+> Use `react-express` for any full-stack web project. Use `custom` only if the project clearly doesn't fit a web preset.
 
 ---
 
@@ -183,17 +191,17 @@ my-project/
 
 ## Documentation
 
-| Guide                                                  | Description                                    |
-| ------------------------------------------------------ | ---------------------------------------------- |
-| [Getting Started](docs/getting-started.md)             | Full walkthrough from setup to coding          |
-| [Config Reference](docs/config-reference.md)           | Every config field, valid values, and defaults |
-| [Agent Catalog](docs/agent-catalog.md)                 | What each of the 6 agents does                 |
-| [Skill Packs](docs/skill-packs.md)                     | What skills come with the react-express preset |
-| [Writing Custom Skills](docs/writing-custom-skills.md) | How to add project-specific skills             |
-| [Merge Strategy](docs/merge-strategy.md)               | How re-scaffolding preserves your edits        |
-| [Best Practices](docs/best-practices.md)               | Tips for getting the best agent output         |
-| [Troubleshooting](docs/troubleshooting.md)             | Common issues and how to fix them              |
-| [Contributing Skills](docs/contributing-skills.md)     | How to contribute community skills             |
+| Guide                                                  | Description                                                                          |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| [Getting Started](docs/getting-started.md)             | Full walkthrough from setup to coding                                                |
+| [Config Reference](docs/config-reference.md)           | Every config field, valid values, and defaults                                       |
+| [Agent Catalog](docs/agent-catalog.md)                 | What each agent does — 6 agents in the react-express preset, 10 possible roles total |
+| [Skill Packs](docs/skill-packs.md)                     | What skills come with the react-express preset                                       |
+| [Writing Custom Skills](docs/writing-custom-skills.md) | How to add project-specific skills                                                   |
+| [Merge Strategy](docs/merge-strategy.md)               | How re-scaffolding preserves your edits                                              |
+| [Best Practices](docs/best-practices.md)               | Tips for getting the best agent output                                               |
+| [Troubleshooting](docs/troubleshooting.md)             | Common issues and how to fix them                                                    |
+| [Contributing Skills](docs/contributing-skills.md)     | How to contribute community skills                                                   |
 
 ---
 
